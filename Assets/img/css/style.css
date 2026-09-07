@@ -1,0 +1,249 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Bebas+Neue&family=Montserrat:wght@400;700;900&display=swap');
+
+:root {
+    --olive-leaf: #4A5326;
+    --blush-rose: #E3688A;
+    --bright-snow: #F6F8F9;
+    --silver: #CCCBCA;
+    --black: #1A1A1A;
+    --gold: #E3B834;
+    --nav-height: 72px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: var(--bright-snow);
+    color: var(--black);
+    overflow-x: hidden;
+}
+
+.hero-header {
+    width: 100%;
+    min-height: 95vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.split-bg {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 4px solid var(--black);
+    background: linear-gradient(to right, var(--olive-leaf) 50%, var(--blush-rose) 50%);
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-container {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    height: var(--nav-height);
+    flex-shrink: 0;
+}
+
+.logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    line-height: 1.3;
+    color: var(--bright-snow);
+    text-shadow: 2px 2px 0 var(--black);
+}
+
+.nav-links { display: flex; align-items: center; gap: 12px; }
+
+.nav-btn {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--black);
+    padding: 6px 14px;
+    background: var(--bright-snow);
+    border: 3px solid var(--black);
+    box-shadow: 6px 6px 0 var(--black);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.nav-btn:hover { transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--black); }
+
+.toggle-switch {
+    width: 42px; height: 22px;
+    background: var(--silver);
+    border-radius: 11px;
+    margin-left: 12px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.toggle-circle {
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--bright-snow);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease;
+}
+
+.toggle-switch.active { background: var(--gold); }
+.toggle-switch.active .toggle-circle { transform: translateX(20px); }
+
+.hero-center { position: relative; flex: 1; }
+
+/* 
+  All three elements are absolute children of .hero-center.
+  z-index works between siblings, so:
+  .main-text::before (z-index 1) < .giant-profile-silhouette (z-index 2) < .main-text::after (z-index 3)
+  BUT ::before/::after are children of .main-text which is inside .portfolio-title-wrapper (z-index 1)
+  — they can never beat z-index 2 of the silhouette.
+
+  SOLUTION: Put the silhouette INSIDE .portfolio-title-wrapper as a sibling of .main-text.
+  Now all z-indexes are in the same context.
+*/
+
+.portfolio-title-wrapper {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.giant-profile-silhouette {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.profile-head {
+    width: 230px; height: 230px;
+    background: var(--gold);
+    border-radius: 50%;
+    border: 4px solid var(--black);
+    margin-bottom: -5px;
+    flex-shrink: 0;
+}
+
+.profile-shoulders {
+    width: 450px; height: 400px;
+    background: var(--gold);
+    border: 4px solid var(--black);
+    border-radius: 225px 225px 0 0;
+    flex-shrink: 0;
+}
+
+.my-text {
+    position: absolute;
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(3.5rem, 8vw, 6.5rem);
+    font-weight: 700;
+    color: var(--bright-snow);
+    top: -60px;
+    left: 250px;
+    z-index: 3;
+    animation: fadeSlideDown 0.8s ease both;
+}
+
+.main-text {
+    position: relative;
+    font-family: 'Lucida Sans', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: clamp(3.5rem, 9vw, 7rem);
+    font-weight: 900;
+    letter-spacing: 0.03em;
+    line-height: 1;
+    display: inline-block;
+    color: transparent;
+    animation: fadeSlideUp 0.8s ease 0.2s both;
+}
+
+.main-text::before {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    font: inherit;
+    letter-spacing: inherit;
+    color: var(--gold);
+    z-index: 1;
+}
+
+.main-text::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    font: inherit;
+    letter-spacing: inherit;
+    color: transparent;
+    -webkit-text-stroke: 3px var(--black);
+    z-index: 3;
+}
+
+@keyframes fadeSlideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.lower-section { padding: 60px 30px; display: flex; justify-content: center; }
+
+.card-container {
+    display: flex;
+    width: 100%;
+    max-width: 900px;
+    border: 3px solid var(--black);
+    background: var(--bright-snow);
+    box-shadow: 10px 10px 0 var(--silver);
+}
+
+.card-left { flex: 1; padding: 40px; border-right: 3px solid var(--black); }
+
+.card-left h2 { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.08em; }
+
+.sketch-line { height: 3px; background: var(--black); width: 90%; margin-top: 20px; }
+
+.card-right { flex: 1; padding: 30px; display: flex; justify-content: center; align-items: center; }
+
+.graphic-box {
+    width: 100%; height: 200px;
+    border: 2px solid var(--black);
+    display: flex; justify-content: center; align-items: center;
+    font-size: 4rem;
+    background: var(--bright-snow);
+    transform: rotate(2deg);
+    transition: transform 0.2s ease;
+}
+
+.graphic-box:hover { transform: scale(1.02) rotate(0deg); }
+
+@media (max-width: 768px) {
+    .nav-container { padding: 0 24px; }
+    .nav-btn { font-size: 10px; padding: 5px 10px; box-shadow: 3px 3px 0 var(--black); }
+    .profile-head { width: 160px; height: 160px; }
+    .profile-shoulders { width: 300px; height: 280px; border-radius: 150px 150px 0 0; }
+    .my-text { font-size: 2.6rem; left: 150px; top: -40px; }
+    .card-container { flex-direction: column; }
+    .card-left { border-right: none; border-bottom: 3px solid var(--black); }
+    .lower-section { padding: 48px 24px; }
+}
